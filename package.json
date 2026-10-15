@@ -1,0 +1,39 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && node scripts/gen-sitemap.mjs",
+    "lint": "oxlint",
+    "check:seo": "node scripts/check-seo.mjs",
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "check:perf": "node scripts/check-perf.mjs",
+    "check": "npm run check:seo && npm run check:a11y && npm run check:perf",
+    "brand:assets": "node scripts/make-brand-assets.cjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
+    "lucide-react": "^1.54.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-image-crop": "^11.1.2",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.4.17",
+    "oxlint": "^1.81.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

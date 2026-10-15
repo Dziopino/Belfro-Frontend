@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Belfero — ocena prac pisemnych z pomocą AI</title>
+    <meta
+      name="description"
+      content="Belfero ocenia prace pisemne nauczycieli: zdjęcie kartki, klucz odpowiedzi z wariantami, ocena z AI i statystyki klasy. Bez nazwiska w skanie dla modelu."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0B0F19" />
+    <meta name="color-scheme" content="dark" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Belfero" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:title" content="Belfero — ocena prac pisemnych z pomocą AI" />
+    <meta
+      property="og:description"
+      content="Zdjęcie kartki, klucz odpowiedzi z wariantami, ocena z AI i statystyki klasy. Imię ucznia znika ze skanu, zanim trafi do modelu."
+    />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Logo Belfero i hasło: AI sprawdza za Ciebie" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Turnstile doczytuje skrypt z tego hosta (TurnstileWidget.tsx) — handshake ma być gotowy przed renderem. -->
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Belfero",
+        "description": "Narzędzie dla nauczycieli: ze zdjęcia pracy pisemnej najpierw znika imię i nazwisko ucznia, a potem model AI ocenia pracę według klucza odpowiedzi nauczyciela. Wyniki trafiają do statystyk klasy i eksportu PDF.",
+        "applicationCategory": "EducationalApplication",
+        "browserRequirements": "Wymaga obsługi JavaScript — aplikacja jest jednostronicowa.",
+        "operatingSystem": "Web",
+        "inLanguage": "pl",
+        "featureList": [
+          "anonimizacja imienia i nazwiska na skanie przed wysłaniem do modelu",
+          "klucze odpowiedzi z wariantami prac i z podpunktami",
+          "pewność oceny wyrażona punktami zadań, a nie uogólniona",
+          "progi przeliczenia punktów na oceny wg skali nauczyciela",
+          "statystyki klasy i eksport arkuszy do PDF"
+        ]
+      }
+    </script>
+
+    <script>
+      /*
+       * Bez tego bloku każdy bezwzględny adres w głowie dokumentu byłby zgadywanką: domena
+       * produkcyjna istnieje tylko w konfiguracji wdrożenia. Vite podstawia `VITE_SITE_URL` przy
+       * budowaniu pakietu; gdy zmiennej nie ma, w kodzie zostaje literal `%VITE_SITE_URL%` i wtedy
+       * origin bierzemy z przeglądarki.
+       *
+       * Kanoniczny adres tworzymy tutaj, a nie w znaczniku, bo `<link rel="canonical" href="/">`
+       * jest dla Vite zasobem do osadzenia i budowanie pada. Zapytanie zostaje poza adresem:
+       * jednorazowy token nie może być własną kanoniczną kopią.
+       */
+      (function () {
+        var configured = '%VITE_SITE_URL%';
+        var origin = /^https?:\/\//.test(configured) ? configured.replace(/\/+$/, '') : window.location.origin;
+        var page = origin + (window.location.pathname || '/');
+
+        var canonical = document.querySelector('link[rel="canonical"]');
+
+        if (!canonical) {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          document.head.appendChild(canonical);
+        }
+
+        canonical.setAttribute('href', page);
+
+        var ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) ogUrl.setAttribute('content', page);
+
+        var ogImage = document.querySelector('meta[property="og:image"]');
+        if (ogImage) ogImage.setAttribute('content', origin + '/og.png');
+
+        /*
+         * Połączenie z originem API ma być gotowe, zanim pierwsze żądanie wyjdzie z aplikacji:
+         * bez tego DNS, TCP i TLS dzieją się w środku pierwszego fetcha, a to kilkaset
+         * milisekund na każdym nowym połączeniu. Znacznik powstaje tylko gdy konfiguracja podaje
+         * pełny adres — bez `VITE_API_URL` zostaje tu literal `%VITE_API_URL%`, a link do takiego
+         * „adresu” byłby żądaniem o 404 i śmieciem w konsoli. `crossorigin` jest wymagane, bo
+         * żądania CORS bez poświadczeń nie dzielą połączenia z preconnect bez tego atrybutu.
+         */
+        var apiConfigured = '%VITE_API_URL%';
+
+        if (/^https?:\/\//.test(apiConfigured)) {
+          try {
+            var apiOrigin = new URL(apiConfigured).origin;
+
+            if (apiOrigin !== window.location.origin) {
+              var preconnect = document.createElement('link');
+              preconnect.rel = 'preconnect';
+              preconnect.href = apiOrigin;
+              preconnect.crossOrigin = 'anonymous';
+              document.head.appendChild(preconnect);
+            }
+          } catch (e) {
+            // Adres, z którego nie da się zbudować originu, to adres nieużywany — nie wstawiamy niczego.
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- React usuwa tę treść, gdy po raz pierwszy renderuje aplikację; istnieje tylko po to, żeby pobieranie pakietu nie było pustym ekranem. -->
+    <div id="root">
+      <p class="text-slate-400 text-sm text-center pt-[40vh] px-4">Ładowanie Belfero…</p>
+    </div>
+    <noscript>
+      <h1>Belfero — ocena prac pisemnych z pomocą AI</h1>
+      <p>
+        Belfero jest aplikacją internetową dla nauczycieli: robisz zdjęcie pracy pisemnej, imię i nazwisko
+        ucznia jest zamazywane w przeglądarce, a ocena powstaje na podstawie Twojego klucza odpowiedzi.
+        Ten ekran wymaga włączonej obsługi JavaScript.
+      </p>
+      <p><a href="/login">Logowanie</a> · <a href="/register">Załóż konto</a></p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

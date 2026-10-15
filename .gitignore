@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === ZALEŻNOŚCI ===
+node_modules
+
+# === BUILD ===
+# Bez `public/`! Tam leżą DejaVuSans.ttf i ikony, bez których eksport PDF gubi polskie
+# diakrytyki, a favicon znika z karty.
+dist
+dist-ssr
+*.tsbuildinfo
+
+# === CACHE ===
+.vite/
+.cache/
+*.local
+
+# === ZMIENNE ŚRODOWISKA ===
+.env
+.env.*
+!.env.example
+
+# === TESTY LOKALNE ===
+# pdfcheck/src to lustrzane odbicie kodu produkowego i jest w repo celowo; kompilacja
+# i wygenerowane PDF-y już nie.
+pdfcheck/dist/
+pdfcheck/out/
+.pdf-smoke/out/
+
+# === EDYTOR ===
+# WebStorm dorzuca .idea tam, gdzie otworzy projekt, więc wzorzec jest w obu katalogach.
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# === SYSTEM ===
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

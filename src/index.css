@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Aplikacja jest wyłącznie ciemna; kontrolki systemowe nie mogą rysować się na jasno. */
+  color-scheme: dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * Ten sam hex co `theme-color` w index.html i tła kart w widokach. Pilnuje go
+ * `node scripts/check-seo.mjs` — rozjazd oznaczałby biały błysk przy pierwszym malowaniu.
+ */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #0b0f19;
+}
+
+/*
+ * Kursor steru w jednym miejscu: sonda zmierzyła 19 przycisków bez `cursor-pointer`, a preferencja
+ * jest jedna — ręka na każdym klikalnym sterze, także mobilnym. `@layer base` jest wynoszone przed
+ * `@tailwind utilities`, dlatego świadome `disabled:cursor-not-allowed` w klasie nadal wygrywa.
+ */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/*
+ * Wspólny wskaźnik fokusu. Rzędy tabel i linki nie rysowały niczego poza tłem `slate-800/30`,
+ * czyli 1,28:1 na karcie — poniżej progu 3:1 dla wskaźnika fokusu. Obrys `blue-500` ma
+ * 4,26:1 nawet na najjaśniejszym tle aplikacji. `:where()` ma zerową specyfikę, dlatego pola
+ * z `focus:outline-none` i własnym pierścieniem zostają przy swoim rysowaniu.
+ */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/*
+ * Zapora dla preferencji ograniczonego ruchu: wygasza animacje i przejścia w całym drzewie,
+ * także te wniesione przez Tailwind w klasach, których tu nie wymieniono.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Skip-link (`Sidebar.tsx:94` → `href="#main-content"`) przyciąga `<main>` do górnej krawędzi
+ * viewportu, a nad nim na jedenastu podstronach aplikacji stoi nieprzezroczysty pasek
+ * `sticky top-0` o wysokości `h-14 sm:h-16` (np. `WalletPage.tsx:194`). Bez marginesu pierwszy
+ * nagłówek widoku wpada pod ten pasek i znika. Długości są zdjęte z klasy paska, nie z sufitu.
+ */
+#main-content {
+  scroll-margin-top: 3.5rem;
+}
+
+@media (min-width: 640px) {
+  #main-content {
+    scroll-margin-top: 4rem;
+  }
+}

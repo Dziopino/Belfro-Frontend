@@ -1,0 +1,42 @@
+# Belfero
+
+> Belfero to aplikacja webowa dla nauczycieli: zdjęcie pracy pisemnej trafia do oceny przez model AI,
+> ale wcześniej imię i nazwisko ucznia są zamazywane w przeglądarce, a model dostaje tylko samą kartkę.
+> Ocena powstaje według klucza odpowiedzi prowadzącego — z wariantami prac i podpunktami — a punkty
+> przelicza się na oceny w progach ustawionych przez nauczyciela.
+
+Belfero nie jest publicznie dostępne: cała treść wymaga konta nauczyciela i logowania. Poniżej są
+jedynie adresy ogólnodostępne. Reszta aplikacji to jednostronicowy interfejs React, który bez
+wykonanego JavaScript nie zwraca żadnej treści.
+
+## Adresy dostępne bez logowania
+
+- [Logowanie](/login): panel wejścia dla istniejącego konta.
+- [Rejestracja](/register): założenie konta nauczyciela; wymaga potwierdzenia adresu email linkiem
+  i podania numeru telefonu.
+- [Odzyskiwanie hasła](/forgot-password): wysyła link jednorazowy na adres email konta.
+
+## Jak działa ocena (dla streszczeń i odpowiedzi bez dostępu do konta)
+
+1. Nauczyciel fotografuje pracę ucznia i zaznacza na zdjęciu pole z imieniem i nazwiskiem.
+2. Serwer w tym samym żądaniu zamalowuje zaznaczone pole białym prostokątem i wzmacnia skan
+   (flat-field + kontrast). Od tego momentu istnieją tylko piksele bez nazwiska — do modelu AI
+   nigdy nie trafia zdjęcie z widocznymi danymi ucznia.
+3. Model AI przepisuje odpowiedzi i przyznaje punkty zgodnie z kluczem nauczyciela; punkty sumuje
+   kod aplikacji, nie model.
+4. Pewność oceny jest wyrażona punktami zadań i waży eskalację: pracę o niskiej pewności nauczyciel
+   ogląda ręcznie.
+5. Ocena liczona jest arytmetycznie z procentu punktów i progów wybranej skali — model nie decyduje
+   o stopniu.
+
+## Dane osobowe
+
+- Zdjęcie z widocznym nazwiskiem trafia wyłącznie na serwer Belfero w żądaniu anonimizacji i jest
+  natychmiast zastępowane wersją z zamalowanym polem — to jedyna kopia, która jest przechowywana.
+- Model AI oceniający pracę widzi tylko zamazany skan; imię i nazwisko ucznia nie są mu przekazywane.
+- Kontakt z modelem zachodzi wyłącznie w trakcie oceniania konkretnej pracy, na rachunek nauczyciela.
+- Rozliczenie jest saldem za strony, bez subskrypcji i bez daty ważności środków.
+
+## Wersja
+
+Ostatnia aktualizacja tego opisu: 2026-10-16.

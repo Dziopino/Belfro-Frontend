@@ -1,0 +1,30 @@
+/*                                 */
+/*  BELFERO                        */
+/*  AI sprawdza za Ciebie          */
+/*                                 */
+
+Belfero jest pisane dla jednego człowieka: nauczyciela, który siedzi wieczorem z kupką kartek.
+Żadna funkcja nie powstała dlatego, że była modna.
+
+/* LUDZIE */
+
+Koncepcja, produkt i kod: Filip
+
+/* STOS */
+
+React 19, Vite i Tailwind CSS — interfejs nauczyciela.
+Express, Prisma i PostgreSQL — API oraz dane kont, klas i ocen.
+Model wizyjny — przepisuje i ocenia odpowiedzi ze zamazanego skanu.
+Cloudflare Turnstile — bramka przeciw automatom na logowaniu, rejestracji i odzyskiwaniu hasła.
+SMS — potwierdzenie numeru telefonu na koncie nauczyciela.
+
+/* WARTOŚCI */
+
+Nazwisko ucznia nie opuszcza serwera w formie czytelnej dla modelu.
+Ocena jest liczona arytmetycznie z punktów, a nie zgadywana przez sztuczną inteligencję.
+Praca o niskiej pewności trafia do nauczyciela, nie do statystyki.
+Bez subskrypcji: płacisz saldem za strony, kiedy oceniasz.
+
+/* OSTATNIA ZMIANA */
+
+2026-10-16

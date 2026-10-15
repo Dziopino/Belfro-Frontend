@@ -1,0 +1,22 @@
+# Belfero — panel nauczyciela. Adresy wymagające logowania są wyłączone, bo niosą
+# identyfikatory uczniów i sesji oceniania (UUID w ścieżce), a treść i tak jest
+# niedostępna bez sesji. Wiersza `Sitemap:` celowo nie ma: wymaga bezwzględnego adresu
+# domeny, a domena istnieje tylko w konfiguracji wdrożenia. Po ustawieniu
+# VITE_SITE_URL można dopisać `Sitemap: https://<domena>/sitemap.xml`.
+
+User-agent: *
+Allow: /login$
+Allow: /register$
+Allow: /forgot-password$
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /verify-phone
+Disallow: /dashboard
+Disallow: /classes
+Disallow: /grading
+Disallow: /grade-thresholds
+Disallow: /answer-keys
+Disallow: /history
+Disallow: /wallet
+Disallow: /settings
+Disallow: /subscription
